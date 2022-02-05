@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :iban do
-    number { "MyString" }
-    name { "MyString" }
+    number { Faker::Bank.iban }
+    name { Faker::Books::Dune.character }
   end
 end
 
