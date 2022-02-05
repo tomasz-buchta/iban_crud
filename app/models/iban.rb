@@ -1,0 +1,3 @@
+class Iban < ApplicationRecord
+end
+
