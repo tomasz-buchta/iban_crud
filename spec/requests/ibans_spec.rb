@@ -19,9 +19,18 @@ RSpec.describe "/ibans", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      create(:iban)
       get ibans_url, headers: valid_headers, as: :json
       expect(response).to be_successful
+    end
+
+    context "With query param" do
+      let(:iban_name) { "test123" }
+      let!(:iban) { create(:iban, name: iban_name) }
+      it "Filters ibans by name" do
+        get ibans_url(query: "test123"), headers: valid_headers, as: :json
+        expect(response).to be_successful
+        expect(response.parsed_body.first).to include({ "id" => iban.id, "name" => iban_name })
+      end
     end
   end
 

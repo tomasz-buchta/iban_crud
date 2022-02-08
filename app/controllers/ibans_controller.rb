@@ -3,7 +3,7 @@ class IbansController < ApplicationController
 
   # GET /ibans
   def index
-    @ibans = Iban.all
+    @ibans = Iban.where(name: params[:query])
 
     render json: @ibans
   end
