@@ -29,7 +29,25 @@ RSpec.describe "/ibans", type: :request do
       it "Filters ibans by name" do
         get ibans_url(query: "test123"), headers: valid_headers, as: :json
         expect(response).to be_successful
-        expect(response.parsed_body.first).to include({ "id" => iban.id, "name" => iban_name })
+        expect(response.parsed_body["data"].first).to include({ "id" => iban.id, "name" => iban_name })
+      end
+    end
+
+    context "with many results" do
+      let!(:ibans) { create_list(:iban, 4) }
+      it "paginates results" do
+        get ibans_url(per: 2), headers: valid_headers, as: :json
+        expect(response).to be_successful
+        puts response.parsed_body
+        expect(response.parsed_body["data"].count).to eq(2)
+      end
+
+      describe "meta field" do
+        it "has next and prev page path" do
+          get ibans_url(per: 2, page: 2), headers: valid_headers, as: :json
+          expect(response.parsed_body.dig("meta", "totalPages")).to eq(3)
+          expect(response.parsed_body.dig("meta", "total")).to eq(5)
+        end
       end
     end
   end

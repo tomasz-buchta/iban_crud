@@ -3,9 +3,15 @@ class IbansController < ApplicationController
 
   # GET /ibans
   def index
-    @ibans = Iban.where(name: params[:query])
+    scope = Iban
+    scope.where(name: params[:query]) if params[:query].present?
+    @ibans = scope.page(params[:page]).per(params[:per])
 
-    render json: @ibans
+    # TODO: This should be handled by serializer
+    render json: { data: @ibans, meta: {
+      "totalPages" => @ibans.total_pages,
+      "total" => @ibans.total_count
+    } }
   end
 
   # GET /ibans/1
