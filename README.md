@@ -24,6 +24,7 @@
 - Api documentation
 - Deployment(heroku/docker)
 - docker compose for local dev
+- cors if this needs to be used by fe app
 
 If this 'should us what rails application should look like':
 I like to use [dry-rb](https://dry-rb.org/) libraries(for example):
